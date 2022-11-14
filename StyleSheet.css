@@ -1,0 +1,15 @@
+textarea {
+    resize: none;
+}
+#message_client {
+    width: 207px;
+}
+#username, #message {
+    width: 96%;
+}
+#post_button {
+    width: 100%;
+}
+.un {
+    color: blue;
+}
