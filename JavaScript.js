@@ -1,4 +1,4 @@
-var massages_read = 0;
+var messages_read = 0;
 function post_message() {
     let username = document.getElementById('username').value;
     let message = document.getElementById('message').value;
@@ -23,6 +23,18 @@ function post_message() {
         alert("Username or message contain illigal character, use [a-zA-Z0-9]");
     }
 }
+function check_last_id() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText > messages_read) {
+                update_message_client();
+            }
+        }
+    }
+    xhttp.open("GET", "php/get_last_id.php", true);
+    xhttp.send();
+}
 function update_message_client() {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -38,17 +50,17 @@ function update_message_client() {
                 }
             }
             var out = document.getElementById("message_area");
-            for (var i = massages_read; i < a.length; i++) {
+            for (var i = 0; i < a.length; i++) {
                 out.innerHTML += '' + a[i][1] + ': ' + a[i][2] + '\n';
-                massages_read = i+1;
+                messages_read++;
                 out.scrollTop = out.scrollHeight;
             }
         }
     }
-    xhttp.open("GET", "php/get_messages.php", true);
+    xhttp.open("GET", "php/get_messages.php?rm=" + messages_read, true);
     xhttp.send();
 
 }
 function main() {
-    setInterval(update_message_client, 1000);
+    setInterval(check_last_id, 1000);
 }
