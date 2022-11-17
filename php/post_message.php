@@ -6,7 +6,7 @@
         $qry = 'insert into message_log(username, message) values ("'.$un.'","'.$me.'")';
         $conn = new mysqli('localhost', 'root', '', 'mp');
         $conn->query($qry);
-        $qry = 'update last_id set id = id + 1';
+        $qry = 'update last_id set id = (select max(id) from message_log)';
         $conn->query($qry);
     }
 ?>

@@ -12,7 +12,7 @@ function post_message() {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                if (this.responseText != '') alert(this.responseText);
+                //if (this.responseText != '') alert(this.responseText);
             }
         }
         xhttp.open("GET", "php/post_message.php?un=" + username + "&me=" + message);
@@ -20,7 +20,7 @@ function post_message() {
         update_message_client();
     }
     else {
-        alert("Username or message contain illigal character, use [a-zA-Z0-9]");
+        alert("Username or message contains illigal character, use [a-zA-Z0-9\\s]");
     }
 }
 function check_last_id() {
