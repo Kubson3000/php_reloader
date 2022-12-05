@@ -1,6 +1,10 @@
 <?php
     $conn = new mysqli('localhost', 'root', '');
-    $qry = 'create database mp; use mp';
+    $qry = 'drop database mp';
+    $conn->query($qry);
+    $qry = 'create database mp';
+    $conn->query($qry);
+    $qry = 'use mp';
     $conn->query($qry);
     $qry = 'create table message_log (
         id int not null auto_increment primary key,

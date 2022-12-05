@@ -61,6 +61,48 @@ function update_message_client() {
     xhttp.send();
 
 }
+function verify() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    if (username == null || username == "" || username.match("^[A-Za-z0-9_]{3,14}$") == null) {
+        alert("Username error");
+        return true;
+    }
+    if (password == null || password == "" || password.match("^[A-Za-z0-9_]{8,}$") == null) {
+        alert("Password error");
+        return true;
+    }
+    return false;
+}
+function login() {
+    if (verify()) return;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert(this.responseText);
+            if (this.responseText == "df") {
+                alert("You dumb fuck!");
+            }
+            else {
+                sessionStorage['token'] = this.responseText;
+            }
+        }
+    }
+    xhttp.open("POST", "php/login.php");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("username="+username+"&password="+password);
+}
+function register() {
+    if (verify()) return;
+}
 function main() {
+    document.getElementById("message").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          document.getElementById("post_button").click();
+        }
+      });
     setInterval(check_last_id, 1000);
 }
