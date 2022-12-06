@@ -4,11 +4,22 @@ textarea {
 #message_client {
     width: 207px;
 }
-#username, #message {
+#username, #password, #message {
     width: 96%;
 }
 #post_button {
     width: 100%;
+}
+#login_register {
+    width: 207px;
+}
+#login_button {
+    float: left;
+    width: 40%;
+}
+#register_button {
+    float: right;
+    width: 40%;
 }
 .un {
     color: blue;

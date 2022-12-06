@@ -1,26 +1,32 @@
 var messages_read = 0;
 function post_message() {
-    let username = document.getElementById('username').value;
     let message = document.getElementById('message').value;
     document.getElementById('message').value = '';
     let regex = '^[a-zA-Z0-9\s]{1,}$';
-    if (username == '' || message == '') {
-        alert("Missing username or message");
+    if (message == '') {
+        alert("Missing message");
         return;
     }
-    if (username.match(regex)) {
+    if (sessionStorage['token'] == undefined) {
+        alert("Not logged in!");
+        return;
+    }
+    let token = sessionStorage['token'];
+    if (message.match(regex)) {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 //if (this.responseText != '') alert(this.responseText);
             }
         }
-        xhttp.open("GET", "php/post_message.php?un=" + username + "&me=" + message);
-        xhttp.send();
+        xhttp.open("POST", "php/post_message.php");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("token=" + token + "&message=" + message);
         update_message_client();
     }
     else {
-        alert("Username or message contains illigal character, use [a-zA-Z0-9\\s]");
+        alert("Message contains illigal character, use [a-zA-Z0-9\\s]");
+        return;
     }
 }
 function check_last_id() {
@@ -81,12 +87,16 @@ function login() {
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            alert(this.responseText);
             if (this.responseText == "df") {
                 alert("You dumb fuck!");
             }
             else {
-                sessionStorage['token'] = this.responseText;
+                if (this.responseText.length == 41) {
+                    sessionStorage['token'] = this.responseText;
+                }
+                else {
+                    alert("Token error");
+                }
             }
         }
     }
@@ -96,8 +106,28 @@ function login() {
 }
 function register() {
     if (verify()) return;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == "df") {
+                alert("Username/password error!");
+            }
+            else if (this.responseText == 'ue') {
+                alert("User already exists!")
+            }
+            else {
+                sessionStorage['token'] = this.responseText;
+            }
+        }
+    }
+    xhttp.open("POST", "php/register.php");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("username="+username+"&password="+password);
 }
 function main() {
+    sessionStorage.removeItem('token')
     document.getElementById("message").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
           event.preventDefault();
