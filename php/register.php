@@ -11,11 +11,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         exit();
     }
     $conn = new mysqli('localhost', 'root', '', 'mp');
-    $qry = 'select * from users where username ="'.$username.'"';
+    $qry = 'select username from users where username ="'.$username.'"';
     $res = $conn->query($qry);
     while ($row = $res->fetch_assoc()) {
-        echo 'ue';
-        exit();
+        if ($row['username'] == $username) {
+            echo 'ue';
+            exit();
+        }
     }
     $qry = 'insert into users(username, password, token) values ("'.$username.'", password("'.$password.'"), password("'.$username.$password.'"))';
     $conn->query($qry);

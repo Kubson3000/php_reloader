@@ -46,13 +46,13 @@ function update_message_client() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = this.responseText;
-            var a = data.split('/');
+            var a = data.split('</>');
             for (var i = 0; i < a.length; i++) {
                 if (a[i] == "") {
                     a.splice(i, 1);
                 }
                 else {
-                    a[i] = a[i].split(';');
+                    a[i] = a[i].split('<;>');
                 }
             }
             var out = document.getElementById("message_area");
@@ -90,13 +90,14 @@ function login() {
             if (this.responseText == "df") {
                 alert("You dumb fuck!");
             }
+            else if (this.responseText == "une") {
+                alert("User doesn't exist!");
+            }
+            else if (this.responseText.length == 41) {
+                sessionStorage['token'] = this.responseText;
+            }
             else {
-                if (this.responseText.length == 41) {
-                    sessionStorage['token'] = this.responseText;
-                }
-                else {
-                    alert("Token error");
-                }
+                alert("Token error");
             }
         }
     }
@@ -127,11 +128,17 @@ function register() {
     xhttp.send("username="+username+"&password="+password);
 }
 function main() {
-    sessionStorage.removeItem('token')
-    document.getElementById("message").addEventListener("keypress", function(event) {
+    sessionStorage.removeItem('token');
+    let msg_box = document.getElementById("message");
+    msg_box.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
           event.preventDefault();
           document.getElementById("post_button").click();
+        }
+        var msg = msg_box.value;
+        console.log(msg.length);
+        if (msg.length > 256) {
+            msg_box.value = msg.slice(0 ,256);
         }
       });
     setInterval(check_last_id, 1000);

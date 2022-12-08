@@ -14,7 +14,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $qry = 'select token from users where username ="'.$username.'" and password = PASSWORD("'.$password.'")';
     $res = $conn->query($qry);
     while ($row = $res->fetch_assoc()) {
-        echo $row['token'];
+        if ($row['token'] != '' || $row['token'] != null) {
+            echo $row['token'];
+        }
+        else {
+            echo 'une';
+        }
         exit();
     }
 }
