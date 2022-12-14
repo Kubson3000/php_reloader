@@ -7,17 +7,17 @@
     </head>
     <body onload="main()">
         <div id="login_register">
-            <from>
-                <input type="text" title="^[A-Za-z0-9]{3,14}&" placeholder="Username" id="username"> <br>
-                <input type="password" title=".^[A-Za-z0-9_]{8,}$" placeholder="Password" id="password"> <br>
-                <button type="button" id="login_button" onclick="login()">Login</button>
-                <button type="button" id="register_button" onclick="register()">Register</button>
-            </from>
+            <div id="logged_in">Not logged in</div>
+            <input type="text" title="^[A-Za-z0-9]{3,14}&" placeholder="Username" id="username"> <br>
+            <input type="password" title=".^[A-Za-z0-9_]{8,}$" placeholder="Password" id="password"> <br>
+            <button type="button" id="login_button" onclick="login()">Login</button>
+            <button type="button" id="register_button" onclick="register()">Register</button>
         </div>
         <div id="message_client">
             <textarea id="message_area" rows="20" cols="25" disabled></textarea> <br>
             <input type="text" placeholder="Message" id="message"> <br>
             <button id="post_button" onclick="post_message()">Submit</button>
         </div>
+        <div id="admin_panel"></div>
     </body>
 </html>

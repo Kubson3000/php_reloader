@@ -80,6 +80,25 @@ function verify() {
     }
     return false;
 }
+function admin_chk() {
+    if (verify()) return;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == "ic") {
+                alert("Incorrect credentials!");
+            }
+            else {
+                document.getElementById("admin_panel").innerHTML = this.responseText;
+            }
+        }
+    }
+    xhttp.open("POST", "php/admin_check.php");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("username="+username+"&password="+password+"&token="+sessionStorage['token']);
+}
 function login() {
     if (verify()) return;
     let username = document.getElementById("username").value;
@@ -95,6 +114,8 @@ function login() {
             }
             else if (this.responseText.length == 41) {
                 sessionStorage['token'] = this.responseText;
+                document.getElementById("logged_in").innerHTML = "Logged in as: " + username;
+                admin_chk();
             }
             else {
                 alert("Token error");
@@ -120,6 +141,7 @@ function register() {
             }
             else {
                 sessionStorage['token'] = this.responseText;
+                document.getElementById("logged_in").innerHTML = "Logged in as: " + username;
             }
         }
     }
