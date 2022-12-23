@@ -5,18 +5,48 @@
         <script src="./JavaScript.js"></script>
         <link rel="stylesheet" href="./StyleSheet.css">
     </head>
-    <body onload="main()">
-        <div id="login_register">
-            <div id="logged_in">Not logged in</div>
-            <input type="text" title="^[A-Za-z0-9]{3,14}&" placeholder="Username" id="username"> <br>
-            <input type="password" title=".^[A-Za-z0-9_]{8,}$" placeholder="Password" id="password"> <br>
-            <button type="button" id="login_button" onclick="login()">Login</button>
-            <button type="button" id="register_button" onclick="register()">Register</button>
+    <body>
+        <div class="fl">
+            <div id="login_register">
+                <div id="logged_in">Not logged in</div>
+                <input type="text" title="^[A-Za-z0-9]{3,14}&" placeholder="Username" id="username"> <br>
+                <input type="password" title=".^[A-Za-z0-9_]{8,}$" placeholder="Password" id="password"> <br>
+                <button type="button" id="login_button" onclick="login()">Login</button>
+                <button type="button" id="register_button" onclick="register()">Register</button>
+                <div  class="cb"></div>
+            </div><br>
+            <div id="message_client">
+                <textarea id="message_area" rows="20" cols="23" disabled></textarea> <br>
+                <input type="text" size="6" placeholder="Message" id="message"> <br>
+                <button id="post_button" onclick="post_message()">Submit</button>
+            </div>
         </div>
-        <div id="message_client">
-            <textarea id="message_area" rows="20" cols="25" disabled></textarea> <br>
-            <input type="text" placeholder="Message" id="message"> <br>
-            <button id="post_button" onclick="post_message()">Submit</button>
+        <div class="fl" id="game_div">
+            <div id="canvas_div">
+                <canvas width="250px" height="250px" id="game_canvas"></canvas>
+            </div>
+            <div id="game_controls">
+                <table>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button id="1a">&uarr;</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="2a">&larr;</button>
+                        </td>
+                        <td>
+                            <button id="3a">&darr;</button>
+                        </td>
+                        <td>
+                            <button id="4a">&rarr;</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div id="admin_panel"></div>
     </body>
