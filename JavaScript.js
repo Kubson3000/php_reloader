@@ -149,7 +149,75 @@ function register() {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("username="+username+"&password="+password);
 }
-function main() {
+function game_main() {
+    let c = document.getElementById("game_canvas");
+    let ctx = c.getContext("2d");
+    class Player {
+        x = 0; y = 0; #height; #width; #color;
+        constructor(x, y, h, w, c) {
+            this.x = x;
+            this.y = y;
+            this.#height = h;
+            this.#width = w;
+            this.#color = c;
+        }
+        move(h_vec, w_vec) {
+            this.x += h_vec;
+            this.y += w_vec;
+        }
+        draw() {
+            ctx.fillStyle = this.#color;
+            ctx.fillRect(this.x, this.y, this.#width, this.#height);
+        }
+    };
+    const player = new Player(10, 10, 20, 20, "red");
+    function draw_line(x1, y1, x2, y2) {
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    }
+    function clear() {
+        ctx.fillStyle = "#F1F1F1";
+        ctx.fillRect(0, 0, 300, 300)
+    }
+    function start() {
+        player.draw();
+        var arrows = ["1a","2a","3a","4a"];
+        for (var i = 0; i < arrows.length; i++) {
+            switch (i) {
+                case 0:
+                    document.getElementById(arrows[i]).addEventListener("click", function() {
+                        player.move(0,-10);
+                        console.log("up")
+                    })
+                    break;
+                case 1:
+                    document.getElementById(arrows[i]).addEventListener("click", function() {
+                        player.move(-10,0);
+                    })
+                    break;
+                case 2:
+                    document.getElementById(arrows[i]).addEventListener("click", function() {
+                        player.move(0, 10);
+                    })
+                    break;
+                case 3:
+                    document.getElementById(arrows[i]).addEventListener("click", function() {
+                        player.move(10, 0);
+                    })
+                    break;
+            }
+        }
+
+        setInterval(update, 100);
+    }
+    function update() {
+        clear();
+        player.draw();
+    }
+    start();
+}
+window.onload = function main() {
     sessionStorage.removeItem('token');
     let msg_box = document.getElementById("message");
     msg_box.addEventListener("keypress", function(event) {
@@ -164,4 +232,5 @@ function main() {
         }
       });
     setInterval(check_last_id, 1000);
+    game_main();
 }
