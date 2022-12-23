@@ -1,17 +1,7 @@
-textarea {
-    resize: none;
-}
-#message_client {
-    width: 207px;
-}
-#username, #password, #message {
-    width: 96%;
-}
-#post_button {
-    width: 100%;
-}
 #login_register {
     width: 207px;
+    border: 1px solid black;
+    padding: 5px;
 }
 #login_button {
     float: left;
@@ -21,6 +11,43 @@ textarea {
     float: right;
     width: 40%;
 }
-.un {
-    color: blue;
+
+#message_client {
+    width: 207px;
+    border: 1px solid black;
+    padding: 5px;
+}
+textarea {
+    resize: none;
+}
+#username, #password, #message {
+    width: 96%;
+}
+#post_button {
+    width: 100%;
+}
+
+#game_div {
+    border: 1px solid black;
+    margin-left: 15px;
+}
+#canvas_div {
+    border: 1px solid black;
+    width: 250px;
+    height: 250px;
+    margin: 17.5px;
+    background-color: #F1F1F1;
+}
+#game_controls {
+    background-color: grey;
+}
+
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.cb{
+    clear: both;
 }
