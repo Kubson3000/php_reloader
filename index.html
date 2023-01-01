@@ -4,6 +4,7 @@
         <title>MP</title>
         <script src="./JavaScript.js"></script>
         <link rel="stylesheet" href="./StyleSheet.css">
+        <link rel="icon" href="./piwo.jpg">
     </head>
     <body>
         <div class="fl">
@@ -28,21 +29,30 @@
             <div id="game_controls">
                 <table>
                     <tr>
-                        <td></td>
                         <td>
-                            <button id="1a">&uarr;</button>
+                            <table>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button id="1a">&uarr;</button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button id="2a">&larr;</button>
+                                    </td>
+                                    <td>
+                                        <button id="3a">&darr;</button>
+                                    </td>
+                                    <td>
+                                        <button id="4a">&rarr;</button>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <td>
-                            <button id="2a">&larr;</button>
-                        </td>
-                        <td>
-                            <button id="3a">&darr;</button>
-                        </td>
-                        <td>
-                            <button id="4a">&rarr;</button>
+                            <div>Coins: <span id="coins_amount"></span></div>
                         </td>
                     </tr>
                 </table>

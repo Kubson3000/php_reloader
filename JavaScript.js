@@ -118,6 +118,7 @@ function login() {
                 admin_chk();
             }
             else {
+                alert(this.responseText);
                 alert("Token error");
             }
         }
@@ -152,8 +153,48 @@ function register() {
 function game_main() {
     let c = document.getElementById("game_canvas");
     let ctx = c.getContext("2d");
+    var coliders = [];
+    var to_render = [];
+    class Border {
+        x=0;y=0;width=0;height=0;id=0;
+        constructor(x,y,w,h,id) {
+            this.x = x;
+            this.y = y;
+            this.width = w;
+            this.height = h;
+        }
+    };
+    class Coin {
+        x=0;y=0;width=10;height=10;#color="yellow";id=1;name="";
+        constructor(x,y,n) {
+            this.x = x;
+            this.y = y;
+            this.name = n;
+        }
+        draw() {
+            ctx.fillStyle = this.#color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+        destructor() {
+            for (const x in coliders) {
+                if (coliders[x].name = this.name) coliders.splice(x);
+            }
+            for (const x in to_render) {
+                if (to_render[x].name = this.name) to_render.splice(x);
+            }
+        }
+    };
+    if (1) {  // temporary
+        var temp = new Coin(50,50,"coin");
+        coliders.push(temp);
+        to_render.push(temp);
+    }
+    coliders.push(new Border(0,0,250,0));
+    coliders.push(new Border(0,250,250,0));
+    coliders.push(new Border(0,0,0,250));
+    coliders.push(new Border(255,0,0,250));
     class Player {
-        x = 0; y = 0; #height; #width; #color;
+        x = 0; y = 0;coins = 0; #height; #width; #color;
         constructor(x, y, h, w, c) {
             this.x = x;
             this.y = y;
@@ -162,12 +203,39 @@ function game_main() {
             this.#color = c;
         }
         move(h_vec, w_vec) {
-            this.x += h_vec;
-            this.y += w_vec;
+            if (!this.collsion_detection(h_vec, w_vec)) {
+                this.x += h_vec;
+                this.y += w_vec;
+            }
         }
         draw() {
             ctx.fillStyle = this.#color;
             ctx.fillRect(this.x, this.y, this.#width, this.#height);
+        }
+        update_gui() {
+            document.getElementById("coins_amount").innerHTML = this.coins;
+        }
+        collsion_detection(h_vec, w_vec) {
+            for (const x in coliders) {
+                if (this.is_coliding(coliders[x], h_vec, w_vec)) {
+                    switch (coliders[x].id){
+                        case 0: // wall
+                            return true;   
+                            break;
+                        case 1: // coin
+                            this.coins++;
+                            coliders[x].destructor();
+                            break;
+                    }
+                }
+            }
+            return false;
+        }
+        is_coliding(o, h_vec, w_vec) {
+            return this.x+h_vec < o.x + o.width &&
+             this.x+h_vec + this.#width > o.x &&
+              this.y+w_vec < o.y + o.height &&
+               this.#height + this.y+w_vec > o.y;
         }
     };
     const player = new Player(10, 10, 20, 20, "red");
@@ -178,7 +246,12 @@ function game_main() {
     }
     function clear() {
         ctx.fillStyle = "#F1F1F1";
-        ctx.fillRect(0, 0, 300, 300)
+        ctx.fillRect(0, 0, 300, 300);
+    }
+    function renderer() {
+        for (const x in to_render) {
+            to_render[x].draw();
+        }
     }
     function start() {
         player.draw();
@@ -188,7 +261,6 @@ function game_main() {
                 case 0:
                     document.getElementById(arrows[i]).addEventListener("click", function() {
                         player.move(0,-10);
-                        console.log("up")
                     })
                     break;
                 case 1:
@@ -213,7 +285,9 @@ function game_main() {
     }
     function update() {
         clear();
+        renderer();
         player.draw();
+        player.update_gui();
     }
     start();
 }
