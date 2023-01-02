@@ -155,6 +155,42 @@ function game_main() {
     let ctx = c.getContext("2d");
     var coliders = [];
     var to_render = [];
+    function get_random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    function isColliding(obj1, obj2) {
+        obj1.x < obj2.x + obj2.width &&
+        obj1.x + obj1.width > obj2.x &&
+        obj1.y < obj2.y + obj2.height &&
+        obj1.height + obj1.y > obj2.y
+    }
+    function generate_coins() {
+        var x = player.x; var y = player.y;
+        var coins = 0;
+        for (const x in coliders) {
+            if (coliders[x].id == 1) coins++;
+        }
+        var isColl = false;
+        while (coins < 3) {
+            isColl = false;
+            while (!isColl) {
+                x = get_random(0,250);
+                y = get_random(0,250);
+                for (const x in coliders) {
+                    if(isColliding(Coin(x,y,"tc"), coliders[x])) {
+                        isColl = true;
+                        break;
+                    }
+                }
+                if(!isColl) {
+                    var name = x.toString() + y.toString();
+                    var temp = new Coin(x,y,name);
+                    coliders.push(temp);
+                    to_render.push(temp);
+                }
+            }
+        }
+    }
     class Border {
         x=0;y=0;width=0;height=0;id=0;
         constructor(x,y,w,h,id) {
@@ -201,6 +237,12 @@ function game_main() {
             this.#height = h;
             this.#width = w;
             this.#color = c;
+        }
+        get_width() {
+            return this.#width
+        }
+        get_height() {
+            return this.#height
         }
         move(h_vec, w_vec) {
             if (!this.collsion_detection(h_vec, w_vec)) {
@@ -285,6 +327,7 @@ function game_main() {
     }
     function update() {
         clear();
+        //generate_coins();
         renderer();
         player.draw();
         player.update_gui();
