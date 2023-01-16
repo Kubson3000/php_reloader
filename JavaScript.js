@@ -156,7 +156,7 @@ function game_main() {
     var coliders = [];
     var to_render = [];
     function get_random(min, max) {
-        return Math.random() * (max - min) + min;
+        return Math.floor(Math.random() * (max - min) + min);
     }
     function isColliding(obj1, obj2) {
         obj1.x < obj2.x + obj2.width &&
@@ -168,26 +168,28 @@ function game_main() {
         var x = player.x; var y = player.y;
         var coins = 0;
         for (const x in coliders) {
-            if (coliders[x].id == 1) coins++;
+            if (coliders[x].id == 1) {
+                coins++;
+            }
         }
+        console.log("Found:",coins,"coins");
         var isColl = false;
         while (coins < 3) {
             isColl = false;
-            while (!isColl) {
-                x = get_random(0,250);
-                y = get_random(0,250);
-                for (const x in coliders) {
-                    if(isColliding(Coin(x,y,"tc"), coliders[x])) {
-                        isColl = true;
-                        break;
-                    }
+            x = get_random(0,250);
+            y = get_random(0,250);
+            for (const x in coliders) {
+                if(isColliding(new Coin(x,y,""), coliders[x])) {
+                    isColl = true;
+                    break;
                 }
-                if(!isColl) {
-                    var name = x.toString() + y.toString();
-                    var temp = new Coin(x,y,name);
-                    coliders.push(temp);
-                    to_render.push(temp);
-                }
+            }
+            if(!isColl) {
+                var name = x.toString() + y.toString();
+                var temp = new Coin(x,y,name);
+                coliders.push(temp);
+                to_render.push(temp);
+                coins++;
             }
         }
     }
@@ -213,18 +215,20 @@ function game_main() {
         }
         destructor() {
             for (const x in coliders) {
-                if (coliders[x].name = this.name) coliders.splice(x);
+                if (coliders[x].name == this.name) {
+                    console.log("Removing:",coliders[x])
+                    coliders.splice(x, 1);
+                }
             }
             for (const x in to_render) {
-                if (to_render[x].name = this.name) to_render.splice(x);
+                if (to_render[x].name == this.name) {
+                    to_render.splice(x, 1);
+                }
             }
+            console.log(coliders, to_render)
+
         }
     };
-    if (1) {  // temporary
-        var temp = new Coin(50,50,"coin");
-        coliders.push(temp);
-        to_render.push(temp);
-    }
     coliders.push(new Border(0,0,250,0));
     coliders.push(new Border(0,250,250,0));
     coliders.push(new Border(0,0,0,250));
@@ -327,7 +331,7 @@ function game_main() {
     }
     function update() {
         clear();
-        //generate_coins();
+        generate_coins();
         renderer();
         player.draw();
         player.update_gui();
