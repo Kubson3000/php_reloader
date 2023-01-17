@@ -179,6 +179,12 @@ function game_main() {
             x = get_random(0,250);
             y = get_random(0,250);
             for (const x in coliders) {
+                if (x == 0) {
+                    if(isColliding(new Coin(x,y,""), player)) {
+                        isColl = true;
+                        break;
+                    }
+                }
                 if(isColliding(new Coin(x,y,""), coliders[x])) {
                     isColl = true;
                     break;
@@ -218,15 +224,15 @@ function game_main() {
                 if (coliders[x].name == this.name) {
                     console.log("Removing:",coliders[x])
                     coliders.splice(x, 1);
+                    break;
                 }
             }
             for (const x in to_render) {
                 if (to_render[x].name == this.name) {
                     to_render.splice(x, 1);
+                    break;
                 }
             }
-            console.log(coliders, to_render)
-
         }
     };
     coliders.push(new Border(0,0,250,0));
