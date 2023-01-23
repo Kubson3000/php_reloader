@@ -159,7 +159,7 @@ function game_main() {
         return Math.floor(Math.random() * (max - min) + min);
     }
     function isColliding(obj1, obj2) {
-        obj1.x < obj2.x + obj2.width &&
+        return obj1.x < obj2.x + obj2.width &&
         obj1.x + obj1.width > obj2.x &&
         obj1.y < obj2.y + obj2.height &&
         obj1.height + obj1.y > obj2.y
@@ -167,30 +167,30 @@ function game_main() {
     function generate_coins() {
         var x = player.x; var y = player.y;
         var coins = 0;
-        for (const x in coliders) {
-            if (coliders[x].id == 1) {
+        for (var c = 0; c < coliders.length; c++) {
+            if (coliders[c].id == 1) {
                 coins++;
             }
         }
-        console.log("Found:",coins,"coins");
-        var isColl = false;
-        while (coins < 3) {
+        var isColl;
+        while (coins < 30) {
             isColl = false;
-            x = get_random(0,250);
-            y = get_random(0,250);
-            for (const x in coliders) {
-                if (x == 0) {
-                    if(isColliding(new Coin(x,y,""), player)) {
+            x = get_random(1,240);
+            y = get_random(1,240);
+
+            if(isColliding(new Coin(x,y,""), player)) {
+                isColl = true;
+            }
+            else {
+                for (var i = 0; i < coliders.length; i++) {
+                    if(isColliding(new Coin(x,y,""), coliders[i])) {
                         isColl = true;
                         break;
                     }
                 }
-                if(isColliding(new Coin(x,y,""), coliders[x])) {
-                    isColl = true;
-                    break;
-                }
             }
-            if(!isColl) {
+
+            if(isColl == false) {
                 var name = x.toString() + y.toString();
                 var temp = new Coin(x,y,name);
                 coliders.push(temp);
@@ -216,8 +216,10 @@ function game_main() {
             this.name = n;
         }
         draw() {
-            ctx.fillStyle = this.#color;
+            ctx.fillStyle = "black";
             ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillStyle = this.#color;
+            ctx.fillRect(this.x + 1, this.y + 1, this.width - 2, this.height - 2);
         }
         destructor() {
             for (const x in coliders) {
@@ -240,19 +242,19 @@ function game_main() {
     coliders.push(new Border(0,0,0,250));
     coliders.push(new Border(255,0,0,250));
     class Player {
-        x = 0; y = 0;coins = 0; #height; #width; #color;
+        x = 0; y = 0;coins = 0; height; width; #color;
         constructor(x, y, h, w, c) {
             this.x = x;
             this.y = y;
-            this.#height = h;
-            this.#width = w;
+            this.height = h;
+            this.width = w;
             this.#color = c;
         }
         get_width() {
-            return this.#width
+            return this.width
         }
         get_height() {
-            return this.#height
+            return this.height
         }
         move(h_vec, w_vec) {
             if (!this.collsion_detection(h_vec, w_vec)) {
@@ -262,7 +264,7 @@ function game_main() {
         }
         draw() {
             ctx.fillStyle = this.#color;
-            ctx.fillRect(this.x, this.y, this.#width, this.#height);
+            ctx.fillRect(this.x, this.y, this.width, this.height);
         }
         update_gui() {
             document.getElementById("coins_amount").innerHTML = this.coins;
@@ -285,9 +287,9 @@ function game_main() {
         }
         is_coliding(o, h_vec, w_vec) {
             return this.x+h_vec < o.x + o.width &&
-             this.x+h_vec + this.#width > o.x &&
+             this.x+h_vec + this.width > o.x &&
               this.y+w_vec < o.y + o.height &&
-               this.#height + this.y+w_vec > o.y;
+               this.height + this.y+w_vec > o.y;
         }
     };
     const player = new Player(10, 10, 20, 20, "red");
