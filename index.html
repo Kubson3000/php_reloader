@@ -22,8 +22,8 @@
                 <button id="post_button" onclick="post_message()">Submit</button>
             </div>
         </div>
-        <div class="fl" id="game_div">
-            <div id="canvas_div">
+        <div class="fl bd" id="game_div">
+            <div class="bd" id="canvas_div">
                 <canvas width="250px" height="250px" id="game_canvas"></canvas>
             </div>
             <div id="game_controls">
@@ -49,10 +49,21 @@
                                         <button id="4a">&rarr;</button>
                                     </td>
                                 </tr>
-                            </table>
+                            </table> <!-- funky arrows -->
                         </td>
                         <td>
-                            <div>Coins: <span id="coins_amount"></span></div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div>Coins: <span id="coins_amount"></span></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button id="c_upgrade">+1 coin <span id="c_upgrade_cost"></span></button>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 </table>

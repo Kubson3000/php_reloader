@@ -115,7 +115,7 @@ function login() {
             else if (this.responseText.length == 41) {
                 sessionStorage['token'] = this.responseText;
                 document.getElementById("logged_in").innerHTML = "Logged in as: " + username;
-                admin_chk();
+                //admin_chk();
             }
             else {
                 alert(this.responseText);
@@ -155,6 +155,18 @@ function game_main() {
     let ctx = c.getContext("2d");
     var coliders = [];
     var to_render = [];
+    var max_coins = 1;
+    var max_coins_uc = 1;
+
+    function cnvs_getCoordinates(e) {
+        var rect = c.getBoundingClientRect();
+        var x=e.clientX - rect.left;
+        var y=e.clientY - rect.top;
+        console.log("Coordinates:", x, ", ", y);
+    }
+    window.cnvs_getCoordinates = cnvs_getCoordinates;
+    c.addEventListener("click", window.cnvs_getCoordinates)
+
     function get_random(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     }
@@ -167,13 +179,13 @@ function game_main() {
     function generate_coins() {
         var x = player.x; var y = player.y;
         var coins = 0;
-        for (var c = 0; c < coliders.length; c++) {
-            if (coliders[c].id == 1) {
+        for (var ci = 0; ci < coliders.length; ci++) {
+            if (coliders[ci].id == 1) {
                 coins++;
             }
         }
         var isColl;
-        while (coins < 30) {
+        while (coins < max_coins) {
             isColl = false;
             x = get_random(1,240);
             y = get_random(1,240);
@@ -268,6 +280,7 @@ function game_main() {
         }
         update_gui() {
             document.getElementById("coins_amount").innerHTML = this.coins;
+            document.getElementById("c_upgrade_cost").innerHTML = "("+max_coins_uc+")";
         }
         collsion_detection(h_vec, w_vec) {
             for (const x in coliders) {
@@ -333,7 +346,14 @@ function game_main() {
                     })
                     break;
             }
-        }
+        } // funky arrow movement
+        document.getElementById("c_upgrade").addEventListener("click", function() {
+            if (player.coins >= max_coins_uc) {
+                player.coins -= max_coins_uc
+                max_coins++;
+                max_coins_uc *= 2;
+            }
+        })
 
         setInterval(update, 100);
     }
